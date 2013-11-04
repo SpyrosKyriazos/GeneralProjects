@@ -16,6 +16,7 @@
  */
 package skyr.tbrpg.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import skyr.tbrpg.enums.Attribute;
@@ -86,8 +87,11 @@ public class GameCharacter {
     public void setItems(Collection<Item> items) {
         this.items = items;
     }
-    
-    public void addItem(Item item){
+
+    public void addItem(Item item) {
+        if (items == null) {
+            items = new ArrayList<Item>();
+        }
         items.add(item);
     }
 

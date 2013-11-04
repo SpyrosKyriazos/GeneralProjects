@@ -73,6 +73,7 @@ public class AdventureState extends AbstractGameState {
             case MENU:
                 gameBase.removeGameState(this);
                 gameBase.addGameState(new MenuState(gameBase));
+                System.out.println("You are back in the menu");
                 break;
             case CHAR:
             case CREATE_CHARACTER:
@@ -124,7 +125,9 @@ public class AdventureState extends AbstractGameState {
         int playerATK = character1.getAttributes().get(Attribute.ATTACK) + character1.getEquippedWeapon().getLevel();
         int monsterDEF = currentRoom.getMonster().getAttributes().get(Attribute.DEFENCE);
         int monsterHealth = currentRoom.getMonster().getAttributes().get(Attribute.HEALTH);
-        currentRoom.getMonster().getAttributes().put(Attribute.HEALTH, monsterHealth - (playerATK - monsterDEF));
+        int damage = playerATK - monsterDEF;
+        System.out.println("You attack for " + damage + " damage");
+        currentRoom.getMonster().getAttributes().put(Attribute.HEALTH, monsterHealth - damage);
         checkForKill();
     }
 
@@ -146,7 +149,12 @@ public class AdventureState extends AbstractGameState {
 
     private void checkForKill() {
         if (currentRoom.getMonster().getAttributes().get(Attribute.HEALTH) <= 0) {
+            for (Item item : currentRoom.getMonster().getItems()) {
+                currentRoom.getLoot().add(item);
+            }
+            currentRoom.setMonster(null);
             System.out.println("monster killed");
+            roomInfo();
         }
     }
 
@@ -161,6 +169,8 @@ public class AdventureState extends AbstractGameState {
         for (Item item : character1.getItems()) {
             System.out.println(item.getName());
         }
+        System.out.println("You hold:");
+        System.out.println(character1.getEquippedWeapon());
     }
 
     private void roomInfo() {

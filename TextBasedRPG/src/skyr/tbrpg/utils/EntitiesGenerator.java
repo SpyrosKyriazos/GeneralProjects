@@ -77,10 +77,12 @@ public class EntitiesGenerator {
     }
 
     private GameCharacter generateMonster(int playersNum, int[] levels) {
-        MonsterName[] names = MonsterName.values();
+        MonsterName[] monsterNames = MonsterName.values();
         Random randomGenerator = new Random();
-        String name = names[randomGenerator.nextInt(names.length)].toString();
-        GameCharacter character = new GameCharacter(name, null);
+        String name1 = monsterNames[randomGenerator.nextInt(monsterNames.length)].toString();
+        RaceName[] raceNames = RaceName.values();
+        String name2 = raceNames[randomGenerator.nextInt(raceNames.length)].toString();
+        GameCharacter character = new GameCharacter(name2 + " " + name1, null);
         //attributes
         Map<Attribute, Integer> atrs = new EnumMap<Attribute, Integer>(Attribute.class);
         for (Attribute atr : Attribute.values()) {
@@ -91,10 +93,7 @@ public class EntitiesGenerator {
         character.setLevel(levels[0]);
         character.setXp(0);
         //equipment
-//        character.setItems(new ArrayList<Item>());
-//        Weapon weapon = generateFirstWeapon();
-//        character.addItem(weapon);
-//        character.setEquippedWeapon(weapon);
+        character.addItem(generateLootWeapon(levels[0]));
         return character;
     }
 
