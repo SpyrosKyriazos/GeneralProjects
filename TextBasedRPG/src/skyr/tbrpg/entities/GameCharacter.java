@@ -31,6 +31,7 @@ public class GameCharacter {
     private int level;
     private int xp;
     private Race race;
+    private CharacterClass clazz;
     private Weapon equippedWeapon;
     private Collection<Item> items;
     private Map<Attribute, Integer> attributes;
@@ -70,6 +71,14 @@ public class GameCharacter {
 
     public void setRace(Race race) {
         this.race = race;
+    }
+
+    public CharacterClass getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(CharacterClass clazz) {
+        this.clazz = clazz;
     }
 
     public Weapon getEquippedWeapon() {

@@ -22,5 +22,7 @@ package skyr.tbrpg.enums;
  */
 public enum RaceName {
     HUMAN,
-    GOBLIN
+    GOBLIN,
+    ELF,
+    DWARF
 }

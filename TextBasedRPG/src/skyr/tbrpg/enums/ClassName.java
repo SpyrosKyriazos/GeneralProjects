@@ -20,6 +20,7 @@ package skyr.tbrpg.enums;
  *
  * @author Spyros
  */
-public enum MonsterName {
-    WARRIOR
+public enum ClassName {
+    WARRIOR,
+    MAGE
 }

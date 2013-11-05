@@ -17,6 +17,7 @@
 package skyr.tbrpg.game.states;
 
 import java.util.Map;
+import java.util.Random;
 import skyr.tbrpg.entities.GameCharacter;
 import skyr.tbrpg.entities.Item;
 import skyr.tbrpg.entities.Room;
@@ -77,10 +78,13 @@ public class AdventureState extends AbstractGameState {
                 break;
             case CHAR:
             case CREATE_CHARACTER:
-                if (params.length < 2) {
-                    throw new UnrecognisedCommandException("parameters missing");
-                }
-                initializeCharacters(params[0], params[1]);
+//                if (params.length < 2) {
+//                    throw new UnrecognisedCommandException("parameters missing");
+//                }
+                initializeCharacters(
+                        params.length > 0 ? params[0] : null,
+                        params.length > 1 ? params[1] : null,
+                        params.length > 2 ? params[2] : null);
                 break;
             case INVENTORY:
             case I:
@@ -109,9 +113,9 @@ public class AdventureState extends AbstractGameState {
         }
     }
 
-    private void initializeCharacters(String charName, String raceName) {
+    private void initializeCharacters(String charName, String raceName, String className) {
         //if not saved new char
-        character1 = entitiesGenerator.generateCharacter(charName, raceName);
+        character1 = entitiesGenerator.generateCharacter(charName, raceName, className);
         showInventory();
         initializeRoom();
     }
@@ -126,9 +130,16 @@ public class AdventureState extends AbstractGameState {
         int monsterDEF = currentRoom.getMonster().getAttributes().get(Attribute.DEFENCE);
         int monsterHealth = currentRoom.getMonster().getAttributes().get(Attribute.HEALTH);
         int damage = playerATK - monsterDEF;
-        System.out.println("You attack for " + damage + " damage");
-        currentRoom.getMonster().getAttributes().put(Attribute.HEALTH, monsterHealth - damage);
-        checkForKill();
+        Random random = new Random();
+        int randomnessMod = 4;
+        int roll = random.nextInt(randomnessMod) - ((randomnessMod / 3) * 2);
+        if (damage + roll > 0) {
+            System.out.println("You attack for " + damage + " damage");
+            currentRoom.getMonster().getAttributes().put(Attribute.HEALTH, monsterHealth - damage);
+            checkForKill();
+        } else {
+            System.out.println("You miss");
+        }
     }
 
     private void loot() {
