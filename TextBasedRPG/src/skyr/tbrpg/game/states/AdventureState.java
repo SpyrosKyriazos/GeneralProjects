@@ -137,6 +137,7 @@ public class AdventureState extends AbstractGameState {
             System.out.println("You attack for " + damage + " damage");
             currentRoom.getMonster().getAttributes().put(Attribute.HEALTH, monsterHealth - damage);
             checkForKill();
+            roomInfo();
         } else {
             System.out.println("You miss");
         }
@@ -148,6 +149,7 @@ public class AdventureState extends AbstractGameState {
                 System.out.println("You get 1 " + item.getName());
                 character1.addItem(item);
             }
+            currentRoom.getLoot().clear();
         } else {
             System.out.println("no loot");
         }
@@ -165,7 +167,6 @@ public class AdventureState extends AbstractGameState {
             }
             currentRoom.setMonster(null);
             System.out.println("monster killed");
-            roomInfo();
         }
     }
 
@@ -181,7 +182,7 @@ public class AdventureState extends AbstractGameState {
             System.out.println(item.getName());
         }
         System.out.println("You hold:");
-        System.out.println(character1.getEquippedWeapon());
+        System.out.println(character1.getEquippedWeapon().getName());
     }
 
     private void roomInfo() {
