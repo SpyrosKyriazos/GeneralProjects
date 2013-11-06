@@ -19,6 +19,7 @@ package skyr.tbrpg.game;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
+import skyr.tbrpg.game.states.MenuState;
 
 /**
  *
@@ -39,6 +40,11 @@ public class GameBase implements GameState {
         return gameStates;
     }
 
+    public void setGameState(GameState state) {
+        gameStates.clear();
+        gameStates.add(state);
+    }
+    
     public void addGameState(GameState state) {
         gameStates.add(state);
     }
@@ -62,21 +68,31 @@ public class GameBase implements GameState {
             gameState.init();
         }
         while (running) {
-            System.out.println("Your action:");
-            String inputCommand = scanner.nextLine();
-            update(inputCommand);
+            beforeCommand();
             for (GameState gameState : gameStates) {
-                gameState.update(inputCommand);
+                gameState.beforeCommand();
+            }
+            String inputCommand = scanner.nextLine();
+            afterCommand(inputCommand);
+            for (GameState gameState : gameStates) {
+                gameState.afterCommand(inputCommand);
             }
         }
     }
 
     @Override
     public void init() {
+        MenuState menuState = new MenuState(this);
+        addGameState(menuState);
     }
 
     @Override
-    public void update(String command) {
+    public void beforeCommand() {
+        
+    }
+    
+    @Override
+    public void afterCommand(String command) {
         
     }
 }

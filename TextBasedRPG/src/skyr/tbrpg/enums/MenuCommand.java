@@ -20,19 +20,26 @@ package skyr.tbrpg.enums;
  *
  * @author Spyros
  */
-public enum Command {
-    EXIT,
-    MENU,
-    JOIN,
-    HOST,
-    HELP,
-    CHAR,
-    CREATE_CHARACTER,
-    I,
-    INVENTORY,
-    ROOM,
-    ATTACK,
-    EQUIP,
-    LOOT,
-    DOOR
+public enum MenuCommand implements EnumsInterface{
+    HOST(1),
+    JOIN(2),
+    EXIT(3);
+    
+    private int id;
+
+    private MenuCommand(int id) {
+        this.id = id;
+    }
+    
+    public int id(){
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return id + ". " + name();
+    }
+    
+    
+    
 }

@@ -17,7 +17,7 @@
 package skyr.tbrpg.game.states;
 
 import java.util.Arrays;
-import skyr.tbrpg.enums.Command;
+import skyr.tbrpg.enums.MenuCommand;
 import skyr.tbrpg.exceptions.UnrecognisedCommandException;
 import skyr.tbrpg.game.GameBase;
 import skyr.tbrpg.game.GameState;
@@ -29,30 +29,30 @@ import skyr.tbrpg.game.GameState;
 public abstract class AbstractGameState implements GameState {
 
     protected GameBase gameBase;
+    private int previousCommand;
 
     public AbstractGameState(GameBase gameBase) {
         this.gameBase = gameBase;
     }
 
-    protected void checkCommand(String inputCommand) {
+    protected void checkCommand(String inputCommand, boolean isParameters) {
         try {
-            String[] commandParts = inputCommand.split("\\s+");
-            if (commandParts.length == 0) {
-                throw new UnrecognisedCommandException("No input");
+            if (isParameters) {
+                String[] commandParts = inputCommand.split("\\s+");
+                if (commandParts.length == 0) {
+                    throw new UnrecognisedCommandException("Missing parameters");
+                }
+                chooseAction(previousCommand, commandParts);
+            } else {
+                Integer choice = Integer.parseInt(inputCommand);
+                previousCommand = choice;
+                chooseAction(choice, null);
             }
-            Command command = null;
-            try {
-                command = Command.valueOf(commandParts[0].toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new UnrecognisedCommandException(commandParts[0]);
-            }
-
-            chooseAction(command, Arrays.copyOfRange(commandParts, 1, commandParts.length));
 
         } catch (UnrecognisedCommandException unrecognisedCommandException) {
             System.out.println("Unrecognised Command: " + unrecognisedCommandException.getMessage());
         }
     }
 
-    public abstract void chooseAction(Command command, String[] params) throws UnrecognisedCommandException;
+    public abstract void chooseAction(Integer command, String[] params) throws UnrecognisedCommandException;
 }

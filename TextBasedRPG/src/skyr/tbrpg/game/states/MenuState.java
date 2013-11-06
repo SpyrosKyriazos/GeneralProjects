@@ -16,9 +16,10 @@
  */
 package skyr.tbrpg.game.states;
 
-import skyr.tbrpg.enums.Command;
+import skyr.tbrpg.enums.MenuCommand;
 import skyr.tbrpg.exceptions.UnrecognisedCommandException;
 import skyr.tbrpg.game.GameBase;
+import skyr.tbrpg.utils.OutputManager;
 import skyr.tbrpg.utils.PropertyManager;
 
 /**
@@ -28,10 +29,13 @@ import skyr.tbrpg.utils.PropertyManager;
 public class MenuState extends AbstractGameState {
 
     private PropertyManager propertyManager;
+    private OutputManager outputManager;
+    private boolean requestingParams = false;
 
     public MenuState(GameBase gameBase) {
         super(gameBase);
         propertyManager = new PropertyManager(PropertyManager.CAPTIONS_PATH);
+        outputManager = new OutputManager();
     }
 
     @Override
@@ -40,39 +44,49 @@ public class MenuState extends AbstractGameState {
     }
 
     @Override
-    public void update(String command) {
-        checkCommand(command);
+    public void beforeCommand() {
+        if (requestingParams) {
+            System.out.println("Insert parameters:");
+        } else {
+            System.out.println("Select action:");
+            outputManager.showInputOptions(MenuCommand.values());
+        }
     }
 
     @Override
-    public void chooseAction(Command command, String[] params) throws UnrecognisedCommandException {
-        switch (command) {
-            case EXIT:
-                gameBase.stop();
-                System.out.println("Goodbye!!!");
-                break;
-            case HOST:
-                if (params.length < 2) {
-                    throw new UnrecognisedCommandException("parameters missing");
-                }
-                host(params);
-                break;
-            case JOIN:
-                System.out.println("work in progress");
-                break;
-            case HELP:
-                int i = 0;
-                for (Command c : Command.values()) {
-                    System.out.println((i++) + ". " + c);
-                }
-                break;
-            default:
-                throw new UnrecognisedCommandException(command.toString());
+    public void afterCommand(String command) {
+        checkCommand(command, requestingParams);
+    }
+
+    @Override
+    public void chooseAction(Integer command, String[] params) throws UnrecognisedCommandException {
+        if (command != null) {
+            switch (command.intValue()) {
+                case 3://exit
+                    gameBase.stop();
+                    System.out.println("Goodbye!!!");
+                    break;
+                case 1://host
+                    if (params != null && params.length > 0) {
+                        host(params);
+                        requestingParams = false;
+                    } else {
+                        System.out.println("Please enter world name");
+                        requestingParams = true;
+                    }
+                    break;
+                case 2://join
+                    System.out.println("work in progress");
+                    break;
+                default:
+                    throw new UnrecognisedCommandException(command.toString());
+            }
+        } else {
+            //handle parameters
         }
     }
 
     private void host(String[] params) {
-        gameBase.removeGameState(this);
-        gameBase.addGameState(new AdventureState(gameBase));
+        gameBase.setGameState(new AdventureState(gameBase));
     }
 }

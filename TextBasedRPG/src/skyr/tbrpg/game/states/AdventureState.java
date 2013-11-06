@@ -16,16 +16,20 @@
  */
 package skyr.tbrpg.game.states;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 import skyr.tbrpg.entities.GameCharacter;
 import skyr.tbrpg.entities.Item;
 import skyr.tbrpg.entities.Room;
+import skyr.tbrpg.enums.AdventureCommand;
 import skyr.tbrpg.enums.Attribute;
-import skyr.tbrpg.enums.Command;
 import skyr.tbrpg.exceptions.UnrecognisedCommandException;
 import skyr.tbrpg.game.GameBase;
 import skyr.tbrpg.utils.EntitiesGenerator;
+import skyr.tbrpg.utils.OutputManager;
 
 /**
  *
@@ -34,6 +38,7 @@ import skyr.tbrpg.utils.EntitiesGenerator;
 public class AdventureState extends AbstractGameState {
 
     private EntitiesGenerator entitiesGenerator;
+    private OutputManager outputManager;
     private GameCharacter character1;
     private GameCharacter character2;
     private GameCharacter character3;
@@ -43,74 +48,87 @@ public class AdventureState extends AbstractGameState {
     public AdventureState(GameBase gameBase) {
         super(gameBase);
         entitiesGenerator = new EntitiesGenerator();
+        outputManager = new OutputManager();
     }
 
     @Override
     public void init() {
-        //TODO if saved
         if (character1 == null) {
             System.out.println("Please create character");
-            System.out.println("create_char character_name race_name");
         }
     }
 
     @Override
-    public void update(String command) {
-        checkCommand(command);
+    public void beforeCommand() {
+        System.out.println("Select action:");
+        Collection<AdventureCommand> commands = new ArrayList<AdventureCommand>();
+        commands.addAll(Arrays.asList(AdventureCommand.values()));
+        if (currentRoom.getMonster() == null) {
+            commands.remove(AdventureCommand.ATTACK);
+            commands.remove(AdventureCommand.SKILL);
+        } else {
+            commands.add(AdventureCommand.LOOT);
+        }
+        outputManager.showInputOptions((Enum[]) commands.toArray());
     }
 
     @Override
-    public void chooseAction(Command command, String[] params) throws UnrecognisedCommandException {
-        if (character1 == null) {
-            if (!command.equals(Command.CREATE_CHARACTER) && !command.equals(Command.CHAR)) {
-                System.out.println("Please create character");
-                System.out.println("create_character character_name race_name");
-                throw new UnrecognisedCommandException(null);
-            }
-        } else if (currentRoom == null) {
-            initializeRoom();
-        }
-        switch (command) {
-            case MENU:
-                gameBase.removeGameState(this);
-                gameBase.addGameState(new MenuState(gameBase));
-                System.out.println("You are back in the menu");
-                break;
-            case CHAR:
-            case CREATE_CHARACTER:
-//                if (params.length < 2) {
-//                    throw new UnrecognisedCommandException("parameters missing");
+    public void afterCommand(String command) {
+        checkCommand(command, false);
+    }
+
+    @Override
+    public void chooseAction(Integer command, String[] params) throws UnrecognisedCommandException {
+//        if (character1 == null) {
+//            if (!command.equals(MenuCommand.CREATE_CHARACTER) && !command.equals(MenuCommand.CHAR)) {
+//                System.out.println("Please create character");
+//                System.out.println("create_character character_name race_name");
+//                throw new UnrecognisedCommandException(null);
+//            }
+//        } else if (currentRoom == null) {
+//            initializeRoom();
+//        }
+//        switch (command) {
+//            case MENU:
+//                gameBase.removeGameState(this);
+//                gameBase.addGameState(new MenuState(gameBase));
+//                System.out.println("You are back in the menu");
+//                break;
+//            case CHAR:
+//            case CREATE_CHARACTER:
+////                if (params.length < 2) {
+////                    throw new UnrecognisedCommandException("parameters missing");
+////                }
+//                initializeCharacters(
+//                        params.length > 0 ? params[0] : null,
+//                        params.length > 1 ? params[1] : null,
+//                        params.length > 2 ? params[2] : null);
+//                break;
+//            case INVENTORY:
+//            case I:
+//                showInventory();
+//                break;
+//            case ROOM:
+//                roomInfo();
+//                break;
+//            case ATTACK:
+//                attack();
+//                break;
+//            case LOOT:
+//                loot();
+//                break;
+//            case DOOR:
+//                nextRoom();
+//                break;
+//            case HELP:
+//                int i = 0;
+//                for (MenuCommand c : MenuCommand.values()) {
+//                    System.out.println((i++) + ". " + c);
 //                }
-                initializeCharacters(
-                        params.length > 0 ? params[0] : null,
-                        params.length > 1 ? params[1] : null,
-                        params.length > 2 ? params[2] : null);
-                break;
-            case INVENTORY:
-            case I:
-                showInventory();
-                break;
-            case ROOM:
-                roomInfo();
-                break;
-            case ATTACK:
-                attack();
-                break;
-            case LOOT:
-                loot();
-                break;
-            case DOOR:
-                nextRoom();
-                break;
-            case HELP:
-                int i = 0;
-                for (Command c : Command.values()) {
-                    System.out.println((i++) + ". " + c);
-                }
-                break;
-            default:
-                throw new UnrecognisedCommandException(command.toString());
-        }
+//                break;
+//            default:
+//                throw new UnrecognisedCommandException(command.toString());
+//        }
     }
 
     private void initializeCharacters(String charName, String raceName, String className) {

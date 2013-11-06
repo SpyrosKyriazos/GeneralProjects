@@ -24,5 +24,7 @@ public interface GameState {
 
     public void init();
 
-    public void update(String command);
+    public void beforeCommand();
+    
+    public void afterCommand(String command);
 }

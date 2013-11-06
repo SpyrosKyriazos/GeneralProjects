@@ -4,6 +4,8 @@
  */
 package skyr.tbrpg.utils;
 
+import java.util.Arrays;
+import java.util.Collection;
 import skyr.tbrpg.entities.GameCharacter;
 import skyr.tbrpg.entities.Room;
 
@@ -12,27 +14,26 @@ import skyr.tbrpg.entities.Room;
  * @author User
  */
 public class OutputManager {
-    private void showIntro(){
-        
+
+    public void showIntro() {
     }
-    
-    private void showCharacterInfo(GameCharacter gameCharacter){
-        
+
+    public void showCharacterInfo(GameCharacter gameCharacter) {
     }
-    
-    private void showCharacterItems(GameCharacter gameCharacter){
-        
+
+    public void showCharacterItems(GameCharacter gameCharacter) {
     }
-    
-    private void showRoomInfo(Room room){
-        
+
+    public void showRoomInfo(Room room) {
     }
-    
-    private void showInputOptions(){
-        
+
+    public void showInputOptions(Enum... enums) {
+        Arrays.sort(enums);
+        for (Enum enum1 : enums) {
+            System.out.println(enum1.toString());
+        }
     }
-    
-    private void showHelp(){
-        
+
+    public void showHelp() {
     }
 }
