@@ -49,6 +49,8 @@ public abstract class AbstractGameState implements GameState {
                 chooseAction(choice, null);
             }
 
+        } catch (NumberFormatException numberFormatException) {
+            System.out.println("Unrecognised Command: " + numberFormatException.getMessage());
         } catch (UnrecognisedCommandException unrecognisedCommandException) {
             System.out.println("Unrecognised Command: " + unrecognisedCommandException.getMessage());
         }

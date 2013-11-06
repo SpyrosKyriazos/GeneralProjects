@@ -27,6 +27,7 @@ import skyr.tbrpg.entities.Room;
 import skyr.tbrpg.enums.AdventureCommand;
 import skyr.tbrpg.enums.Attribute;
 import skyr.tbrpg.exceptions.UnrecognisedCommandException;
+import skyr.tbrpg.game.CharacterWizard;
 import skyr.tbrpg.game.GameBase;
 import skyr.tbrpg.utils.EntitiesGenerator;
 import skyr.tbrpg.utils.OutputManager;
@@ -55,6 +56,10 @@ public class AdventureState extends AbstractGameState {
     public void init() {
         if (character1 == null) {
             System.out.println("Please create character");
+            CharacterWizard characterWizard = new CharacterWizard();
+            gameBase.getGameStates().clear();
+            character1 = characterWizard.createCharacter();
+            gameBase.addGameState(this);
         }
     }
 

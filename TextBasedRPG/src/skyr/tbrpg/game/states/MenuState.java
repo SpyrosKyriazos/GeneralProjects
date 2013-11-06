@@ -87,6 +87,7 @@ public class MenuState extends AbstractGameState {
     }
 
     private void host(String[] params) {
-        gameBase.setGameState(new AdventureState(gameBase));
+        AdventureState adventureState = new AdventureState(gameBase);
+        gameBase.setGameState(adventureState);
     }
 }

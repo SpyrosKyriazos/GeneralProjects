@@ -43,10 +43,12 @@ public class GameBase implements GameState {
     public void setGameState(GameState state) {
         gameStates.clear();
         gameStates.add(state);
+        state.init();
     }
     
     public void addGameState(GameState state) {
         gameStates.add(state);
+        state.init();
     }
     
     public void removeGameState(GameState state) {
