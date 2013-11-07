@@ -21,17 +21,11 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
-import skyr.tbrpg.entities.CharacterClass;
-import skyr.tbrpg.entities.Effect;
 import skyr.tbrpg.entities.GameCharacter;
 import skyr.tbrpg.entities.Item;
-import skyr.tbrpg.entities.Race;
 import skyr.tbrpg.entities.Room;
 import skyr.tbrpg.entities.Weapon;
 import skyr.tbrpg.enums.Attribute;
-import skyr.tbrpg.enums.ClassName;
-import skyr.tbrpg.enums.RaceName;
-import skyr.tbrpg.enums.WeaponName;
 
 /**
  *
@@ -41,7 +35,7 @@ public class EntitiesGenerator {
 
     public GameCharacter generateCharacter(String charName, String raceName, String className) {
 
-        GameCharacter character = new GameCharacter(charName, generateRaceObject(raceName));
+        GameCharacter character = new GameCharacter(charName, null);
         //attributes
         Map<Attribute, Integer> atrs = new EnumMap<Attribute, Integer>(Attribute.class);
         for (Attribute atr : Attribute.values()) {
@@ -50,7 +44,7 @@ public class EntitiesGenerator {
         atrs.put(Attribute.HEALTH, 10);
         character.setAttributes(atrs);
         //class
-        character.setClazz(generateClassObject(className));
+        character.setClazz(null);
         //lvl
         character.setLevel(1);
         character.setXp(0);
@@ -82,16 +76,16 @@ public class EntitiesGenerator {
     }
 
     private GameCharacter generateMonster(int playersNum, int[] levels) {
-        ClassName[] classNames = ClassName.values();
-        Random randomGenerator = new Random();
-        ClassName className = classNames[randomGenerator.nextInt(classNames.length)];
-        String name1 = className.toString();
-        RaceName[] raceNames = RaceName.values();
-        RaceName raceName = raceNames[randomGenerator.nextInt(raceNames.length)];
-        String name2 = raceName.toString();
-        GameCharacter character = new GameCharacter(name2 + " " + name1, generateRaceObject(name2));
+//        ClassName[] classNames = ClassName.values();
+//        Random randomGenerator = new Random();
+//        ClassName className = classNames[randomGenerator.nextInt(classNames.length)];
+//        String name1 = className.toString();
+//        RaceName[] raceNames = RaceName.values();
+//        RaceName raceName = raceNames[randomGenerator.nextInt(raceNames.length)];
+//        String name2 = raceName.toString();
+        GameCharacter character = new GameCharacter("mplarg", null);
         //class
-        character.setClazz(generateClassObject(name1));
+//        character.setClazz(generateClassObject(name1));
         //attributes
         Map<Attribute, Integer> atrs = new EnumMap<Attribute, Integer>(Attribute.class);
         for (Attribute atr : Attribute.values()) {
@@ -107,55 +101,55 @@ public class EntitiesGenerator {
         return character;
     }
 
-    private Race generateRaceObject(String raceNameString) {
-        try {
-            RaceName raceName = RaceName.valueOf(raceNameString.toUpperCase());
-            switch (raceName) {
-                case HUMAN:
-                    return new Race(raceName, null);
-                default:
-                    return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
-    }
+//    private Race generateRaceObject(String raceNameString) {
+//        try {
+//            RaceName raceName = RaceName.valueOf(raceNameString.toUpperCase());
+//            switch (raceName) {
+//                case HUMAN:
+//                    return new Race(raceName, null);
+//                default:
+//                    return null;
+//            }
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
 
     private Weapon generateFirstWeapon() {
-        Weapon weapon = new Weapon(WeaponName.DAGGER.toString(), 1, null, null);
+        Weapon weapon = new Weapon("dagger", 1, null, null);
         return weapon;
     }
 
     private Weapon generateLootWeapon(int playerLevel) {
-        WeaponName[] names = WeaponName.values();
-        Random randomGenerator = new Random();
-        String name = names[randomGenerator.nextInt(names.length)].toString();
-        Weapon weapon = new Weapon(name, playerLevel, null, null);
+//        WeaponName[] names = WeaponName.values();
+//        Random randomGenerator = new Random();
+//        String name = names[randomGenerator.nextInt(names.length)].toString();
+        Weapon weapon = new Weapon("weapon1", playerLevel, null, null);
         return weapon;
     }
 
-    private CharacterClass generateClassObject(String classNameString) {
-        try {
-            ClassName className = ClassName.valueOf(classNameString.toUpperCase());
-            Effect effect1 = new Effect();
-            switch (className) {
-                case WARRIOR:
-                    effect1.setAttribute(Attribute.DEFENCE);
-                    effect1.setModifier(1);
-                    break;
-                case MAGE:
-                    effect1.setAttribute(Attribute.POWER);
-                    effect1.setModifier(1);
-                    break;
-                default:
-                    return null;
-            }
-            ArrayList<Effect> effects = new ArrayList<Effect>();
-            effects.add(effect1);
-            CharacterClass characterClass = new CharacterClass(className, effects);
-            return characterClass;
-        } catch (Exception e) {
-            return null;
-        }
-    }
+//    private CharacterClass generateClassObject(String classNameString) {
+//        try {
+//            ClassName className = ClassName.valueOf(classNameString.toUpperCase());
+//            Effect effect1 = new Effect();
+//            switch (className) {
+//                case WARRIOR:
+//                    effect1.setAttribute(Attribute.DEFENCE);
+//                    effect1.setModifier(1);
+//                    break;
+//                case MAGE:
+//                    effect1.setAttribute(Attribute.POWER);
+//                    effect1.setModifier(1);
+//                    break;
+//                default:
+//                    return null;
+//            }
+//            ArrayList<Effect> effects = new ArrayList<Effect>();
+//            effects.add(effect1);
+//            CharacterClass characterClass = new CharacterClass(className.toString(), effects);
+//            return characterClass;
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
 }

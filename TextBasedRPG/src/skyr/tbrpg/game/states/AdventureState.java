@@ -60,6 +60,7 @@ public class AdventureState extends AbstractGameState {
             gameBase.getGameStates().clear();
             character1 = characterWizard.createCharacter();
             gameBase.addGameState(this);
+            initializeRoom();
         }
     }
 
@@ -74,7 +75,7 @@ public class AdventureState extends AbstractGameState {
         } else {
             commands.add(AdventureCommand.LOOT);
         }
-        outputManager.showInputOptions((Enum[]) commands.toArray());
+        outputManager.showInputOptions(commands.toArray(new Enum[commands.size()]));
     }
 
     @Override
@@ -93,54 +94,30 @@ public class AdventureState extends AbstractGameState {
 //        } else if (currentRoom == null) {
 //            initializeRoom();
 //        }
-//        switch (command) {
-//            case MENU:
-//                gameBase.removeGameState(this);
-//                gameBase.addGameState(new MenuState(gameBase));
-//                System.out.println("You are back in the menu");
-//                break;
-//            case CHAR:
-//            case CREATE_CHARACTER:
-////                if (params.length < 2) {
-////                    throw new UnrecognisedCommandException("parameters missing");
-////                }
-//                initializeCharacters(
-//                        params.length > 0 ? params[0] : null,
-//                        params.length > 1 ? params[1] : null,
-//                        params.length > 2 ? params[2] : null);
-//                break;
-//            case INVENTORY:
-//            case I:
-//                showInventory();
-//                break;
-//            case ROOM:
-//                roomInfo();
-//                break;
-//            case ATTACK:
-//                attack();
-//                break;
-//            case LOOT:
-//                loot();
-//                break;
-//            case DOOR:
-//                nextRoom();
-//                break;
-//            case HELP:
-//                int i = 0;
-//                for (MenuCommand c : MenuCommand.values()) {
-//                    System.out.println((i++) + ". " + c);
-//                }
-//                break;
-//            default:
-//                throw new UnrecognisedCommandException(command.toString());
-//        }
-    }
-
-    private void initializeCharacters(String charName, String raceName, String className) {
-        //if not saved new char
-        character1 = entitiesGenerator.generateCharacter(charName, raceName, className);
-        showInventory();
-        initializeRoom();
+        switch (command) {
+            case 8:
+                gameBase.removeGameState(this);
+                gameBase.addGameState(new MenuState(gameBase));
+                System.out.println("You are back in the menu");
+                break;
+            case 3:
+                showInventory();
+                break;
+            case 4:
+                roomInfo();
+                break;
+            case 1:
+                attack();
+                break;
+            case 5:
+                loot();
+                break;
+            case 6:
+                nextRoom();
+                break;
+            default:
+                throw new UnrecognisedCommandException(command.toString());
+        }
     }
 
     private void initializeRoom() {

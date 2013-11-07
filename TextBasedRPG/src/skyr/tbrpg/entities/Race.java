@@ -16,26 +16,38 @@
  */
 package skyr.tbrpg.entities;
 
-import skyr.tbrpg.enums.RaceName;
-
 /**
  *
  * @author Spyros
  */
 public class Race {
-    private RaceName raceName;
+
+    private int id;
+    private String raceName;
     private Effect effect;
 
-    public Race(RaceName raceName, Effect effect) {
+    public Race() {
+    }
+
+    public Race(int id, String raceName, Effect effect) {
+        this.id = id;
         this.raceName = raceName;
         this.effect = effect;
     }
-    
-    public RaceName getRaceName() {
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getRaceName() {
         return raceName;
     }
 
-    public void setRaceName(RaceName raceName) {
+    public void setRaceName(String raceName) {
         this.raceName = raceName;
     }
 
@@ -46,5 +58,4 @@ public class Race {
     public void setEffect(Effect effect) {
         this.effect = effect;
     }
-    
 }

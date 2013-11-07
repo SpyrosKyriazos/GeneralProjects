@@ -9,3 +9,4 @@
 -Output util class
 -calculate final attributes before atk
 -turn order when on combat
+-hashmap for classes and races read form property files on start

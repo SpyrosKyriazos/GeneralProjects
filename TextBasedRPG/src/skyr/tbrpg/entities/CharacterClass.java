@@ -5,27 +5,40 @@
 package skyr.tbrpg.entities;
 
 import java.util.Collection;
-import skyr.tbrpg.enums.ClassName;
 
 /**
  *
  * @author User
  */
 public class CharacterClass {
-    private ClassName className;
+
+    private int id;
+    private String className;
     private Collection<Effect> effects;
 
-    public CharacterClass(ClassName className, Collection<Effect> effects) {
+    public CharacterClass() {
+    }
+
+    public CharacterClass(int id, String className, Collection<Effect> effects) {
+        this.id = id;
         this.className = className;
         this.effects = effects;
     }
 
-    public ClassName getClassName() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getClassName() {
         return className;
     }
 
-    public void setClassName(ClassName className) {
-        this.className = className;
+    public void setClassName(String name) {
+        this.className = name;
     }
 
     public Collection<Effect> getEffects() {
@@ -35,5 +48,4 @@ public class CharacterClass {
     public void setEffects(Collection<Effect> effects) {
         this.effects = effects;
     }
-    
 }

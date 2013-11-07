@@ -30,6 +30,17 @@ public class Effect {
     private boolean self;
     private Race vsRace;
 
+    public Effect() {
+    }
+    
+    public Effect(int modifier, Attribute attribute, boolean percentage, boolean self, Race vsRace) {
+        this.modifier = modifier;
+        this.attribute = attribute;
+        this.percentage = percentage;
+        this.self = self;
+        this.vsRace = vsRace;
+    }
+    
     public int getModifier() {
         return modifier;
     }

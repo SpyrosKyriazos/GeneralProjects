@@ -5,8 +5,7 @@
 package skyr.tbrpg.game;
 
 import skyr.tbrpg.entities.GameCharacter;
-import skyr.tbrpg.enums.ClassName;
-import skyr.tbrpg.enums.RaceName;
+import skyr.tbrpg.exceptions.UnrecognisedCommandException;
 import skyr.tbrpg.utils.EntitiesGenerator;
 import skyr.tbrpg.utils.OutputManager;
 
@@ -32,16 +31,20 @@ public class CharacterWizard extends GameBase {
     }
 
     @Override
+    public void init() {
+    }
+
+    @Override
     public void beforeCommand() {
         super.beforeCommand();
         if (name == null) {
             System.out.println("Insert name:");
         } else if (raceName == null) {
             System.out.println("Insert race:");
-            outputManager.showInputOptions(RaceName.values());
+//            outputManager.showInputOptions(RaceName.values());
         } else if (className == null) {
             System.out.println("Insert class:");
-            outputManager.showInputOptions(ClassName.values());
+//            outputManager.showInputOptions(ClassName.values());
         }
     }
 
@@ -51,10 +54,43 @@ public class CharacterWizard extends GameBase {
         if (name == null) {
             name = command;
         } else if (raceName == null) {
-            raceName = command;
+            try {
+                Integer choice = Integer.parseInt(command);
+                switch (choice) {
+                    case 1:
+                        raceName = "human";
+                        break;
+                    case 2:
+                        raceName = "elf";
+                        break;
+                    case 3:
+                        raceName = "dwarf";
+                        break;
+                    case 4:
+                        raceName = "goblin";
+                        break;
+                    default:
+                        throw new UnrecognisedCommandException("");
+                }
+            } catch (NumberFormatException numberFormatException) {
+            } catch (UnrecognisedCommandException unrecognisedCommandException) {
+            }
         } else if (className == null) {
-            className = command;
-        }else{
+            try {
+                Integer choice = Integer.parseInt(command);
+                switch (choice) {
+                    case 1:
+                        className = "warrior";
+                        break;
+                    case 2:
+                        className = "mage";
+                        break;
+                    default:
+                        throw new UnrecognisedCommandException("");
+                }
+            } catch (NumberFormatException numberFormatException) {
+            } catch (UnrecognisedCommandException unrecognisedCommandException) {
+            }
             EntitiesGenerator entitiesGenerator = new EntitiesGenerator();
             character = entitiesGenerator.generateCharacter(name, raceName, className);
             stop();
