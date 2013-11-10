@@ -10,7 +10,7 @@ import java.util.Collection;
  *
  * @author User
  */
-public class CharacterClass {
+public class CharacterClass implements YamlEntity {
 
     private int id;
     private String className;
@@ -47,5 +47,10 @@ public class CharacterClass {
 
     public void setEffects(Collection<Effect> effects) {
         this.effects = effects;
+    }
+
+    @Override
+    public String toString() {
+        return getClassName();
     }
 }

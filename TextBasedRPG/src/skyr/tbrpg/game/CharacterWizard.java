@@ -8,6 +8,7 @@ import skyr.tbrpg.entities.GameCharacter;
 import skyr.tbrpg.exceptions.UnrecognisedCommandException;
 import skyr.tbrpg.utils.EntitiesGenerator;
 import skyr.tbrpg.utils.OutputManager;
+import skyr.tbrpg.utils.YamlParser;
 
 /**
  *
@@ -20,9 +21,11 @@ public class CharacterWizard extends GameBase {
     private String className;
     private OutputManager outputManager;
     private GameCharacter character;
+    private YamlParser yamlParser;
 
     public CharacterWizard() {
         outputManager = new OutputManager();
+        yamlParser = YamlParser.getYamlParserInstance();
     }
 
     public GameCharacter createCharacter() {
@@ -41,10 +44,10 @@ public class CharacterWizard extends GameBase {
             System.out.println("Insert name:");
         } else if (raceName == null) {
             System.out.println("Insert race:");
-//            outputManager.showInputOptions(RaceName.values());
+            outputManager.showInputOptions(yamlParser.getRaces().values());
         } else if (className == null) {
             System.out.println("Insert class:");
-//            outputManager.showInputOptions(ClassName.values());
+            outputManager.showInputOptions(yamlParser.getClasses().values());
         }
     }
 
@@ -56,40 +59,14 @@ public class CharacterWizard extends GameBase {
         } else if (raceName == null) {
             try {
                 Integer choice = Integer.parseInt(command);
-                switch (choice) {
-                    case 1:
-                        raceName = "human";
-                        break;
-                    case 2:
-                        raceName = "elf";
-                        break;
-                    case 3:
-                        raceName = "dwarf";
-                        break;
-                    case 4:
-                        raceName = "goblin";
-                        break;
-                    default:
-                        throw new UnrecognisedCommandException("");
-                }
+                raceName = yamlParser.getRaces().get(choice).getRaceName();
             } catch (NumberFormatException numberFormatException) {
-            } catch (UnrecognisedCommandException unrecognisedCommandException) {
             }
         } else if (className == null) {
             try {
                 Integer choice = Integer.parseInt(command);
-                switch (choice) {
-                    case 1:
-                        className = "warrior";
-                        break;
-                    case 2:
-                        className = "mage";
-                        break;
-                    default:
-                        throw new UnrecognisedCommandException("");
-                }
+                className = yamlParser.getClasses().get(choice).getClassName();
             } catch (NumberFormatException numberFormatException) {
-            } catch (UnrecognisedCommandException unrecognisedCommandException) {
             }
             EntitiesGenerator entitiesGenerator = new EntitiesGenerator();
             character = entitiesGenerator.generateCharacter(name, raceName, className);

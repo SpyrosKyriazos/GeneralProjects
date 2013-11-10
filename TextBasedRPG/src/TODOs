@@ -1,12 +1,12 @@
 -networking
--input by numbers (show 4 choices on screen)
+v-input by numbers (show 4 choices on screen)
 -enemies fight back
 -xp and levels
 -simplified dnd rules for combat
 -calculate effects in combat
--classes
+v-classes
 -random monster name generator
--Output util class
+v-Output util class
 -calculate final attributes before atk
 -turn order when on combat
--hashmap for classes and races read form property files on start
+-hashmap for weapon types, classes and races read form yaml files on start

@@ -46,7 +46,9 @@ public class Test {
 
         try {
             YamlWriter yamlWriter = new YamlWriter(new FileWriter("classes.yml"));
-            yamlWriter.write(classes);
+            for (CharacterClass characterClass : classes) {
+                yamlWriter.write(characterClass);
+            }
             yamlWriter.close();
         } catch (IOException iOException) {
             iOException.printStackTrace(System.err);
@@ -55,12 +57,12 @@ public class Test {
 
     private void generateRacesYaml() {
         ArrayList<Race> races = new ArrayList<Race>();
-        
+
         Effect atkEffect = new Effect(5, Attribute.ATTACK, true, true, null);
         Effect powEffect = new Effect(5, Attribute.POWER, true, true, null);
         Effect hltEffect = new Effect(5, Attribute.HEALTH, true, true, null);
         Effect defEffect = new Effect(5, Attribute.DEFENCE, true, true, null);
-        
+
         //human
         Race human = new Race(1, "human", null);
         races.add(human);
@@ -75,7 +77,9 @@ public class Test {
         races.add(tortoiseman);
         try {
             YamlWriter yamlWriter = new YamlWriter(new FileWriter("races.yml"));
-            yamlWriter.write(races);
+            for (Race race : races) {
+                yamlWriter.write(race);
+            }
             yamlWriter.close();
         } catch (IOException iOException) {
             iOException.printStackTrace(System.err);

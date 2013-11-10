@@ -20,7 +20,7 @@ package skyr.tbrpg.entities;
  *
  * @author Spyros
  */
-public class Race {
+public class Race implements YamlEntity {
 
     private int id;
     private String raceName;
@@ -57,5 +57,10 @@ public class Race {
 
     public void setEffect(Effect effect) {
         this.effect = effect;
+    }
+
+    @Override
+    public String toString() {
+        return getRaceName();
     }
 }
