@@ -23,10 +23,12 @@ public class ServerThread implements Runnable {
     @Override
     public void run() {
         initSockets();
+        ServerGameThread gameThread = initGameThread();
         while (running) {
             try {
                 System.out.println("waiting connection ...");
                 Socket s = server.accept();
+                
             } catch (IOException ex) {
                 Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -41,6 +43,10 @@ public class ServerThread implements Runnable {
         } catch (IOException ex) {
             Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private ServerGameThread initGameThread(){
+        return null;
     }
 
     public void stop() {
