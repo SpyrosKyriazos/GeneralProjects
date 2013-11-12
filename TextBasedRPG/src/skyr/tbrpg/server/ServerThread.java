@@ -19,16 +19,25 @@ public class ServerThread implements Runnable {
     private boolean running = true;
     private ServerSocket server;
     private int port = 12345;
+    private int id = 1;
 
     @Override
     public void run() {
         initSockets();
-        ServerGameThread gameThread = initGameThread();
+        ServerGameThread gameThreadRunnable = new ServerGameThread();
+        Thread gameThread = new Thread(gameThreadRunnable);
+        gameThread.start();
+        ServerOutputThread outThreadRunnable = new ServerOutputThread();
+        Thread outThread = new Thread(outThreadRunnable);
+        outThread.start();
         while (running) {
             try {
                 System.out.println("waiting connection ...");
                 Socket s = server.accept();
-                
+                ServerInputThread inputThreadRunnable = new ServerInputThread(s, id, gameThreadRunnable);
+                Thread inputThread = new Thread(inputThreadRunnable);
+                inputThread.start();
+                id++;
             } catch (IOException ex) {
                 Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -43,10 +52,6 @@ public class ServerThread implements Runnable {
         } catch (IOException ex) {
             Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    private ServerGameThread initGameThread(){
-        return null;
     }
 
     public void stop() {
