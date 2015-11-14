@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>altec movies</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta http-equiv="X-FRAME-OPTIONS" content="SAMEORIGIN">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="icon" href="">
+
+        <link rel="stylesheet" href="css/min.css"  type="text/css" />
+        <script type="text/javascript" src="js/libs/min.js"></script>
+        <style>
+            th {
+                text-align: center !important;
+            }
+        </style>
+
+    </head>
+    <body>
+
+
+        <script type="text/x-handlebars">
+            <div class="container">
+            <h1>Altec Movies</h1>
+
+            {{outlet}}
+            </div>
+        </script>
+        <script type="text/x-handlebars" data-template-name="index">
+            <div style="text-align:center">
+            {{emwf-browse-table 
+            tableProps=tableProps
+            classNames="movies-table"
+            isSelectable=false
+            }}
+            </div>
+        </script>
+
+
+        <script>
+
+var App = Em.Application.create();
+App.IndexRoute = Em.Route.extend({
+    model: function () {
+//        var data = '[{"Path":"....","Title":"Dawn of the Planet of the Apes","Year":"2014","Rated":"PG-13","Released":"11 Jul 2014","Runtime":"130 min","Genre":"Action, Drama, Sci-Fi","Director":"Matt Reeves","Writer":"Mark Bomback, Rick Jaffa, Amanda Silver, Rick Jaffa (characters), Amanda Silver (characters), Pierre Boulle (novel)","Actors":"Andy Serkis, Jason Clarke, Gary Oldman, Keri Russell","Plot":"A growing nation of genetically evolved apes led by Caesar is threatened by a band of human survivors of the devastating virus unleashed a decade earlier.","Language":"English, American Sign Language","Country":"USA","Awards":"Nominated for 1 Oscar. Another 14 wins & 41 nominations.","Poster":"http://ia.media-imdb.com/images/M/MV5BMTgwODk3NDc1N15BMl5BanBnXkFtZTgwNTc1NjQwMjE@._V1_SX300.jpg","Metascore":"79","imdbRating":"7.7","imdbVotes":"281,071","imdbID":"tt2103281","Type":"movie","Response":"True"},{"Path":"....","Title":"Grand Central","Year":"2013","Rated":"N/A","Released":"28 Aug 2013","Runtime":"94 min","Genre":"Drama, Romance","Director":"Rebecca Zlotowski","Writer":"Ga?lle Mac?, Rebecca Zlotowski, Ga?lle Mac? (original idea), Ulysse Korolitski (collaboration)","Actors":"Tahar Rahim, L?a Seydoux, Olivier Gourmet, Denis M?nochet","Plot":"Gary, an unskilled young man, lands a job as a decontamination sub-contractor at a nuclear power plant in the lower valley of the Rhone. Inducted into the workforce by supervisor Gilles and...","Language":"French","Country":"France, Austria","Awards":"4 wins & 9 nominations.","Poster":"http://ia.media-imdb.com/images/M/MV5BMjE3MzU2MTE2NV5BMl5BanBnXkFtZTcwMzA2MzA1OQ@@._V1_SX300.jpg","Metascore":"N/A","imdbRating":"6.2","imdbVotes":"1,479","imdbID":"tt2835548","Type":"movie","Response":"True"}]';
+//                return JSON.parse(data);
+        return $.ajax({url: "resources/movies", cache: false});
+    }
+});
+App.IndexController = Em.Controller.extend({
+    tableProps: function () {
+        var self = this;
+        var theData = [];
+        self.get("model").forEach(function (record) {
+            var recordObject = Em.Object.create(record);
+            theData.pushObject(recordObject);
+        });
+        var theProps = {
+            "data": theData,
+            "columns": [
+                {"data": "Poster", "title": "Poster", "render": function (data, type, full, meta) {
+                        return Em.isEmpty(data) ? " - " : "<img width='100px' src='/MediaPresenter/resources/movies/images?url=" + data + "'>";
+                    }},
+                {"data": "Title", "title": "Title", "render": function (data, type, full, meta) {
+                        return Em.isEmpty(data) ? "-" : data;
+                    }},
+                {"data": "Year", "title": "Year", "render": function (data, type, full, meta) {
+                        return Em.isEmpty(data) ? " - " : data;
+                    }},
+                {"data": "imdbRating", "title": "Rating", "render": function (data, type, full, meta) {
+                        return Em.isEmpty(data) ? " - " : data;
+                    }},
+                {"data": "Metascore", "title": "Meta Score", "render": function (data, type, full, meta) {
+                        return Em.isEmpty(data) ? " - " : data;
+                    }},
+                {"data": "Time", "title": "Folder Create Date", "render": function (data, type, full, meta) {
+                        var theDate = new Date(parseInt(data));
+                        return Em.isEmpty(data) ? " - " : theDate.getDate()+"/"+theDate.getMonth()+"/"+theDate.getFullYear();
+                    }},
+                {"data": "imdbID", "title": "IMDB Link", "render": function (data, type, full, meta) {
+                        return Em.isEmpty(data) ? " - " : "<a style='font-size:40px' target='_blank' href='http://www.imdb.com/title/" + data + "'><span class=\"fa fa-external-link\"></span></a>";
+                    }},
+                {"data": "Path", "title": "Open Path", "render": function (data, type, full, meta) {
+                        return Em.isEmpty(data) ? " - " : "<a  href=\"javascrit:void(0);\" data-placement=\"bottom\" data-toggle=\"popover\" title=\"copy\" data-content=\"<span style='width:50px;word-break:break-all;white-space:normal;'>file://"+data+"</span>\"  style='font-size:40px' ><span class=\"fa fa-folder-open\"></span></a>";
+                    }}
+            ],
+            order: [[1, 'Title']]
+        };
+        var language = EMWF.BrowseTableComponent.create().get("_tableProps.language");
+        language["sZeroRecords"] = "Δεν βρέθηκαν εγγραφές";
+        theProps["language"] = language;
+        theProps["drawCallback"]=function(settings){
+            $("*[data-toggle='popover']").popover({html:true});
+        }
+        return theProps;
+    }.property("model"),
+});
+
+        </script>
+
+
+    </body>
+</html>
